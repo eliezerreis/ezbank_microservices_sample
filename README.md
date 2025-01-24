@@ -41,3 +41,20 @@ This project demonstrates the implementation of a modern **Microservices Archite
 ## Use Cases
 
 This project is ideal for demonstrating scalable and resilient applications like e-commerce platforms, order processing systems, and real-time data pipelines.
+
+## Microservices
+
+List of microservices **currently** available on our EzBank. Each microservice is built and containerized using different methods for showcasing various containerization techniques.
+
+
+### 1. **Accounts Service**
+- **Description:** This service simulates the creation of a new bank customer and the setup of their account. Each customer is identified by a unique mobile number, and only one account can be created per mobile number.
+- **Containerization:** The service is containerized using a **Dockerfile**.
+
+### 2. **Card Service**
+- **Description:** Similar to the Accounts service, each mobile number can only have one associated card. This service is responsible for managing the creation of bank cards.
+- **Containerization:** The service is containerized using **Buildpacks**, which automatically generates container images based on the application's code.
+
+### 3. **Loans Service**
+- **Description:** This service manages loan offerings and tracks the loans a customer can take within EzBank.
+- **Containerization:** The service is containerized using **Jib** (a Java containerization tool by Google), which allows building optimized Docker images directly from Java code without needing a Dockerfile.
