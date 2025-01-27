@@ -3,3 +3,6 @@ logging:
     root: INFO
   file:
     name: logs/accounts-dev.log
+spring:
+  datasource:
+    url: jdbc:h2:file:/mnt/data/accountdb;AUTO_SERVER=TRUE

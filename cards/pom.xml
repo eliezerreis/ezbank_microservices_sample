@@ -11,9 +11,10 @@
 
 	<groupId>com.ezbank</groupId>
 	<artifactId>cards</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<name>cards</name>
 	<description>Microservices for cards</description>
+	<packaging>jar</packaging>
 	<url/>
 
 	<properties>
@@ -77,6 +78,7 @@
 	</dependencies>
 
 	<build>
+		<finalName>cards</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
