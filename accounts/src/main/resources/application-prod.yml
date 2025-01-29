@@ -1,4 +1,3 @@
-
 logging:
   level:
     root: INFO
@@ -9,4 +8,4 @@ spring:
     url: jdbc:h2:file:/mnt/data/accountdb;AUTO_SERVER=TRUE
   config:
     activate:
-      on-profile: "dev"
+      on-profile: "prod"
