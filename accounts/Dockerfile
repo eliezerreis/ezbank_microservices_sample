@@ -20,9 +20,12 @@ ENV TZ=America/New_York
 # Update timezone
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
+# Install curl (and other necessary dependencies)
+RUN apk add --no-cache curl
+
 VOLUME ["/mnt"]
 
-EXPOSE 8080
+EXPOSE 8090
 ADD ./target/accounts.jar accounts.jar
 
 CMD java -XX:+HeapDumpOnOutOfMemoryError -Xms$JVM_XMS -Xmx$JVM_XMX -DskipTests -Dspring.profiles.active=$ENV_PROFILE -jar accounts.jar

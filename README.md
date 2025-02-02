@@ -10,7 +10,7 @@ This project demonstrates the implementation of a modern **Microservices Archite
   A set of independently deployable services, each handling specific business logic, built with **Spring Boot**.
 
 - **Spring Cloud**:  
-  Utilizes Spring Cloud components for service discovery (Eureka), centralized configuration (Spring Cloud Config), and resilient service-to-service communication (Feign, Ribbon, Hystrix).
+  Utilizes Spring Cloud components for service discovery (Eureka), centralized configuration (Spring Cloud Config), and resilient service-to-service communication (Feign, Ribbon, Hystrix), and Spring Cloud BUS.
 
 - **Docker**:  
   All services are containerized using **Docker**, ensuring consistency across development, testing, and production environments.

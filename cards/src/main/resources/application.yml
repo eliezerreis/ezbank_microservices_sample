@@ -1,6 +1,6 @@
 spring:
   application:
-    name: Cards
+    name: cards
   profiles:
     active: default
   config:

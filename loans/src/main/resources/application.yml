@@ -1,6 +1,6 @@
 spring:
   application:
-    name: Loans
+    name: loans
   profiles:
     active: default
   config:
