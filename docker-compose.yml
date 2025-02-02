@@ -1,45 +1,10 @@
 version: '3'
 services:
-  accounts:
-    image: ezbank/accounts:latest
-    ports:
-      - '8080:8080'
-    deploy:
-      resources:
-        limits:
-          memory: 700m
-    extra_hosts:
-      - host.docker.internal:host-gateway
-    networks:
-      - ezbank-compose-network
-  cards:
-    image: ezbank/cards:latest
-    ports:
-      - '9090:9090'
-    deploy:
-      resources:
-        limits:
-          memory: 700m
-    extra_hosts:
-      - host.docker.internal:host-gateway
-    networks:
-      - ezbank-compose-network
-  loans:
-    image: ezbank/loans:latest
-    ports:
-      - '8090:8090'
-    deploy:
-      resources:
-        limits:
-          memory: 700m
-    extra_hosts:
-      - host.docker.internal:host-gateway
-    networks:
-      - ezbank-compose-network
-  configServer:
+
+  configserver:
     image: ezbank/configs:latest
     ports:
-      - '8071:8071'
+      - '8085:8085'
     deploy:
       resources:
         limits:
@@ -61,6 +26,44 @@ services:
       - host.docker.internal:host-gateway
     networks:
       - ezbank-compose-network
+
+  accounts:
+    image: ezbank/accounts:latest
+    ports:
+      - '8090:8090'
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    networks:
+      - ezbank-compose-network
+  cards:
+    image: ezbank/cards:latest
+    ports:
+      - '8091:8091'
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    networks:
+      - ezbank-compose-network
+  loans:
+    image: ezbank/loans:latest
+    ports:
+      - '8092:8092'
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    networks:
+      - ezbank-compose-network
+
 networks:
   ezbank-compose-network:
     driver: bridge
