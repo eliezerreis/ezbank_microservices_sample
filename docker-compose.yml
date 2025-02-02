@@ -36,6 +36,31 @@ services:
       - host.docker.internal:host-gateway
     networks:
       - ezbank-compose-network
+  configServer:
+    image: ezbank/configs:latest
+    ports:
+      - '8071:8071'
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    networks:
+      - ezbank-compose-network
+  rabbitmq:
+    image: rabbitmq:latest
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    networks:
+      - ezbank-compose-network
 networks:
   ezbank-compose-network:
     driver: bridge
