@@ -1,22 +1,41 @@
 services:
-  rabbitmq:
-    image: rabbitmq:latest
-    hostname: rabbitmq
+#  rabbitmq:
+#    image: rabbitmq:latest
+#    hostname: rabbitmq
+#    ports:
+#      - '5672:5672'
+#      - '15672:15672'
+#    command: ["rabbitmq-plugins", "enable", "rabbitmq_management"]
+#    healthcheck:
+#      test: ["CMD", "rabbitmqctl", "status"]
+#      timeout: 5s
+#      retries: 10
+#      start_period: 10s
+#    environment:
+#      RABBITMQ_DEFAULT_USER: guest
+#      RABBITMQ_DEFAULT_PASS: guest
+#    extends:
+#      file: common-config.yml
+#      service: network-deploy-service
+
+  eurekaserver:
+    image: ezbank/eurekaserver:latest
     ports:
-      - '5672:5672'
-      - '15672:15672'
-    command: ["rabbitmq-plugins", "enable", "rabbitmq_management"]
+      - "8081:8081"
+    depends_on:
+      configserver:
+        condition: service_healthy
     healthcheck:
-      test: ["CMD", "rabbitmqctl", "status"]
+      test: "curl --fail --silent localhost:8080/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
       timeout: 5s
       retries: 10
       start_period: 10s
-    environment:
-      RABBITMQ_DEFAULT_USER: guest
-      RABBITMQ_DEFAULT_PASS: guest
     extends:
       file: common-config.yml
-      service: network-deploy-service
+      service: microservice-eureka-config
+    environment:
+      SPRING_APPLICATION_NAME: "eurekaserver"
 
   configserver:
     image: ezbank/configserver:latest
