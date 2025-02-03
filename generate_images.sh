@@ -19,3 +19,13 @@ cd configserver
 mvn clean install
 docker build . -t ezbank/configserver:0.0.1 -t ezbank/configserver:latest
 cd ..
+
+cd apigateway
+mvn clean install
+docker build . -t ezbank/apigateway:0.0.1 -t ezbank/apigateway:latest
+cd ..
+
+cd eurekaserver
+mvn clean install
+docker build . -t ezbank/eurekaserver:0.0.1 -t ezbank/eurekaserver:latest
+cd ..
