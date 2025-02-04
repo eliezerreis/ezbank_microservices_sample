@@ -1,9 +1,10 @@
-
 spring:
   application:
     name: eurekaserver
+  profiles:
+    active: default
   config:
-    import: "configserver:http://localhost:8085/"
+    import: configserver:http://localhost:8085/
 
 management:
   endpoints:
@@ -19,6 +20,3 @@ management:
     health:
       probes:
         enabled: true
-
-server:
-  port: 8080

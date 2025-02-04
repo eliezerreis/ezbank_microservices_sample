@@ -2,15 +2,6 @@ FROM amazoncorretto:21-alpine-jdk
 
 MAINTAINER eliezerreis@gmail.com
 
-ARG PROFILE=dev
-ARG APP_VERSION
-ARG GIT_COMMIT_ID
-
-ENV ENV_PROFILE=$PROFILE
-ENV LOG_LEVEL=INFO
-ENV APP_VERSION=${APP_VERSION:-unknown}
-ENV GIT_COMMIT_ID=${GIT_COMMIT_ID:-unknown}
-
 ENV JVM_XMS=${JVM_XMS:-512m}
 ENV JVM_XMX=${JVM_XMX:-1024m}
 
@@ -28,4 +19,4 @@ VOLUME ["/mnt"]
 EXPOSE 8091
 ADD ./target/cards.jar cards.jar
 
-CMD java -XX:+HeapDumpOnOutOfMemoryError -Xms$JVM_XMS -Xmx$JVM_XMX -DskipTests -Dspring.profiles.active=$ENV_PROFILE -jar cards.jar
+CMD java -XX:+HeapDumpOnOutOfMemoryError -Xms$JVM_XMS -Xmx$JVM_XMX -DskipTests -jar cards.jar

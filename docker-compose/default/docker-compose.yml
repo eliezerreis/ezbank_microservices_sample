@@ -18,12 +18,97 @@ services:
 #      file: common-config.yml
 #      service: network-deploy-service
 
+  configserver:
+    image: ezbank/configserver:latest
+    container_name: configserver-ms
+    ports:
+      - '8085:8085'
+    healthcheck:
+      test: "curl --fail --silent localhost:8085/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    extends:
+      file: common-config.yml
+      service: base-config
+
   eurekaserver:
-    image: ezbank/eurekaserver:latest
+    image: "ezbank/eurekaserver:latest"
+    container_name: eurekaserver-ms
     ports:
       - "8081:8081"
     depends_on:
       configserver:
+        condition: service_healthy
+    healthcheck:
+      test: "curl --fail --silent localhost:8081/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    extends:
+      file: common-config.yml
+      service: eureka-config
+    environment:
+      SPRING_APPLICATION_NAME: "eurekaserver"
+
+  accounts:
+    image: ezbank/accounts:latest
+    container_name: accounts-ms
+    ports:
+      - '8090:8090'
+    healthcheck:
+      test: "curl --fail --silent localhost:8090/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    extends:
+      file: common-config.yml
+      service: services-config
+
+  cards:
+    image: ezbank/cards:latest
+    container_name: cards-ms
+    ports:
+      - '8091:8091'
+    healthcheck:
+      test: "curl --fail --silent localhost:8091/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    extends:
+      file: common-config.yml
+      service: services-config
+
+  loans:
+    image: ezbank/loans:latest
+    container_name: loans-ms
+    ports:
+      - '8092:8092'
+    healthcheck:
+      test: "curl --fail --silent localhost:8092/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    extends:
+      file: common-config.yml
+      service: services-config
+
+  apigateway:
+    image: ezbank/apigateway:latest
+    container_name: apigateway-ms
+    ports:
+      - "8080:8080"
+    depends_on:
+      accounts:
+        condition: service_healthy
+      loans:
+        condition: service_healthy
+      cards:
         condition: service_healthy
     healthcheck:
       test: "curl --fail --silent localhost:8080/actuator/health/readiness | grep UP || exit 1"
@@ -33,51 +118,8 @@ services:
       start_period: 10s
     extends:
       file: common-config.yml
-      service: microservice-eureka-config
-    environment:
-      SPRING_APPLICATION_NAME: "eurekaserver"
-
-  configserver:
-    image: ezbank/configserver:latest
-    ports:
-      - '8085:8085'
-    healthcheck:
-      test: "curl --fail --silent localhost:8085/actuator/health/readiness | grep UP || exit 1"
-      interval: 10s
-      timeout: 5s
-      retries: 10
-      start_period: 10s
-    depends_on:
-      rabbitmq:
-        condition: service_healthy
-    extends:
-      file: common-config.yml
-      service: microservice-base-config
-
-  accounts:
-    image: ezbank/accounts:latest
-    ports:
-      - '8090:8090'
-    extends:
-      file: common-config.yml
-      service: microservice-config
-
-  cards:
-    image: ezbank/cards:latest
-    ports:
-      - '8091:8091'
-    extends:
-      file: common-config.yml
-      service: microservice-config
-
-  loans:
-    image: ezbank/loans:latest
-    ports:
-      - '8092:8092'
-    extends:
-      file: common-config.yml
-      service: microservice-config
+      service: eureka-config
 
 networks:
-  ezbank-compose-network:
+  ezbank-vlan:
     driver: bridge

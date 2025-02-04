@@ -1,30 +1,34 @@
 services:
-  network-deploy-service:
+  network-config:
     networks:
-      - ezbank-compose-network
-    extra_hosts:
-      - host.docker.internal:host-gateway
+      - ezbank-vlan
 
-  microservice-base-config:
+  base-config:
     extends:
-        service: network-deploy-service
+      service: network-config
     deploy:
       resources:
         limits:
           memory: 700m
 
-  microservice-config:
+  eureka-config:
     extends:
-      service: microservice-base-config
-    environment:
-      SPRING_CONFIG_URI: 'configserver:http://configserver:8085'
-      SPRING_PROFILES_ACTIVE: 'default'
+      service: base-config
     depends_on:
       configserver:
         condition: service_healthy
-
-  microservice-eureka-config:
-    extends:
-      service: microservice-config
     environment:
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_CONFIG_IMPORT: configserver:http://configserver:8085
+      SPRING_BOOT_APPLICATION_LOG_LEVEL: DEBUG
+
+  services-config:
+    extends:
+      service: eureka-config
+    depends_on:
+      eurekaserver:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8081/eureka/
+
