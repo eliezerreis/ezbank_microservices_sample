@@ -32,6 +32,23 @@ This project demonstrates the implementation of a modern **Microservices Archite
 
 ## Additional Features
 
+- **Microservices Resiliency**
+
+  To ensure fault tolerance and system reliability, various resiliency patterns have been implemented across the microservices:
+
+  - **Circuit Breaker**: Integrated **Spring Cloud Circuit Breaker** across all services to prevent cascading failures and allow the system to recover gracefully when a service is unavailable.
+
+  - **API Gateway Circuit Breaker**: Added circuit breakers at the API Gateway level to ensure that if one service fails, requests to that service are gracefully handled without affecting other services.
+
+  - **HTTP Timeout with Fallback**: Implemented configurable HTTP timeouts in all services to avoid prolonged waits in case of service failures. Each service has a fallback mechanism to handle timeouts and return default responses.
+
+  - **Retry Pattern**: Applied the retry pattern in independent services like the **Accounts Service** to retry failed requests a specified number of times, allowing the system to recover from temporary glitches.
+
+  - **Rate Limiting with Redis**: In the **Loans Service**, **Redis** is used to implement rate limiting, ensuring that the system can handle high request volumes without overwhelming any particular service.
+
+These resiliency measures ensure that the system can continue to function even in the event of temporary failures, providing a seamless experience to users.
+
+
 - **CI/CD Pipeline**:  
   Automated build, test, and deployment pipelines ensuring smooth and consistent delivery to production.
 
