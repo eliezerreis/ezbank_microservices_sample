@@ -46,9 +46,4 @@ public class LoanController {
         loanService.delete(mobileNumber);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-
-    @GetMapping("/fallback")
-    public ResponseEntity<String> fallback() {
-        return ResponseEntity.status(HttpStatus.OK).body("Service temporarily unavailable. Please try again later.");
-    }
 }
