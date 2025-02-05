@@ -1,7 +1,5 @@
 spring:
   application:
-    name: accounts
-  profiles:
-    active: default
+    name: "accounts"
   config:
-    import: "configserver:http://localhost:8085/"
+    import: "optional:configserver:http://localhost:8085/"

@@ -1,6 +1,4 @@
-FROM amazoncorretto:21-alpine-jdk
-
-MAINTAINER eliezerreis@gmail.com
+FROM amazoncorretto:17-alpine-jdk
 
 ENV JVM_XMS=${JVM_XMS:-512m}
 ENV JVM_XMX=${JVM_XMX:-1024m}
@@ -19,4 +17,4 @@ VOLUME ["/mnt"]
 EXPOSE 8092
 ADD ./target/loans.jar loans.jar
 
-CMD java -XX:+HeapDumpOnOutOfMemoryError -Xms$JVM_XMS -Xmx$JVM_XMX -DskipTests -Dspring.profiles.active=$ENV_PROFILE -jar loans.jar
+CMD java -XX:+HeapDumpOnOutOfMemoryError -Xms$JVM_XMS -Xmx$JVM_XMX -DskipTests -jar loans.jar

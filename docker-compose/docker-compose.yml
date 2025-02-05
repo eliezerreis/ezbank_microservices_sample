@@ -1,0 +1,48 @@
+services:
+  configserver:
+    image: "ezbank/configserver:latest"
+    container_name: configserver-ms
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    networks:
+      - mynetwork
+    ports:
+      - "8085:8085"
+    healthcheck:
+      test: "curl --fail --silent localhost:8085/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  eurekaserver:
+    image: "ezbank/eurekaserver:latest"
+    container_name: eurekaserver-ms
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    networks:
+      - mynetwork
+    ports:
+      - "8081:8081"
+    depends_on:
+      configserver:
+        condition: service_healthy
+    healthcheck:
+      test: "curl --fail --silent localhost:8081/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    environment:
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_CONFIG_IMPORT: configserver:http://configserver:8085/
+      SPRING_APPLICATION_NAME: "eurekaserver"
+
+
+networks:
+  mynetwork:
+    driver: "bridge"

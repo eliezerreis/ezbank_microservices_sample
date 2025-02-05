@@ -1,6 +1,4 @@
-FROM amazoncorretto:21-alpine-jdk
-
-MAINTAINER eliezerreis@gmail.com
+FROM amazoncorretto:17-alpine-jdk
 
 ENV JVM_XMS=${JVM_XMS:-512m}
 ENV JVM_XMX=${JVM_XMX:-1024m}
