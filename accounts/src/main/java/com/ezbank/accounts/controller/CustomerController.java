@@ -2,6 +2,7 @@ package com.ezbank.accounts.controller;
 
 import com.ezbank.accounts.dto.CustomerDTO;
 import com.ezbank.accounts.service.CustomerService;
+import io.github.resilience4j.retry.annotation.Retry;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
@@ -12,6 +13,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.concurrent.TimeoutException;
 
 @RestController
 @RequestMapping(value = "/api/customer", produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -34,13 +37,24 @@ public class CustomerController {
     }
 
     @GetMapping("/{mobileNumber}")
+    @Retry(name = "fetchCustomer", fallbackMethod = "fetchCustomerFallback")
     public ResponseEntity<CustomerDTO> fetchCustomer(
         @RequestHeader("ezbank-correlation-id") String correlationId,
-        @PathVariable @NotNull String mobileNumber) {
+        @PathVariable @NotNull String mobileNumber) throws TimeoutException {
 
+        logger.info("Fetch Customer Method Invoked");
+
+        // Simulate sm error to run the exponential backoffice strategy
+        throw new TimeoutException("Error while fetching customers");
+    }
+
+    // After the retries the fallback will recovery from the failure
+    public ResponseEntity<CustomerDTO> fetchCustomerFallback(String correlationId, String mobileNumber, Throwable throwable) {
         logger.debug("ezbank-correlation-id: {}", correlationId);
 
         CustomerDTO customer = customerService.fetch(mobileNumber);
+
+        // Simulate na error to run the exponential backoffice strategy
         return ResponseEntity.status(HttpStatus.OK).body(customer);
     }
 
