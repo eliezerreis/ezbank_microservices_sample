@@ -106,6 +106,33 @@ services:
       SPRING_BOOT_APPLICATION_LOG_LEVEL: DEBUG
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8081/eureka/
 
+  redis:
+    image: redis:latest
+    container_name: redis
+    networks:
+      - eznetwork
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 30s
+      retries: 3
+      start_period: 10s
+      timeout: 5s
+
+  redisinsight:
+    image: redis/redisinsight:latest
+    container_name: redisinsight-ms
+    networks:
+      - eznetwork
+    ports:
+      - "8083:5540"
+    environment:
+      - REDIS_URL=redis:6379
+    depends_on:
+      - redis
+    restart: always
+
   apigateway:
     image: "ezbank/apigateway:latest"
     container_name: apigateway-ms
@@ -121,6 +148,8 @@ services:
       loans:
         condition: service_healthy
       cards:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     healthcheck:
       test: "curl --fail --silent apigateway:8080/actuator/health/readiness | grep UP || exit 1"

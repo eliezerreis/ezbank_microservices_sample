@@ -40,9 +40,9 @@ This project demonstrates the implementation of a modern **Microservices Archite
 
   - **HTTP Timeout with Fallback**: Implemented configurable HTTP timeouts in all services to avoid prolonged waits in case of service failures. Each service has a fallback mechanism to handle timeouts and return default responses.
 
-  - **Retry Pattern**: The retry pattern has been applied to the **Accounts Service** to retry failed requests a specified number of times, allowing the system to recover from temporary glitches. This includes retry mechanisms both at the API Gateway level and at the method level. In the Accounts Service, the `/api/consumer/retry` endpoint simulates a failure and falls back to a recovery method using retry logic within the method.
+  - **Retry Pattern**: The retry pattern has been applied to the **Accounts Service** to retry failed requests a specified number of times, allowing the system to recover from temporary glitches. This includes retry mechanisms both at the API Gateway level and at the method level. In the Accounts Service, the `/api/consumer/fetchCustomer` endpoint simulates a failure and falls back to a recovery method using retry logic within the method.
   
-  - **Rate Limiting with Redis**: In the **Loans Service**, **Redis** is used to implement rate limiting, ensuring that the system can handle high request volumes without overwhelming any particular service.
+  - **Rate Limiting with Redis**: In the **Services**, **Redis** is used to implement rate limiting, ensuring that the system can handle high request volumes without overwhelming any particular service. To test this feature is recomended to use adobe benchmark that, in latest version of macOS, is installed by default. Open your terminal and run `ab -n 10 -c 2 -v 3 http://localhost:8090/accounts/api/customer/{mobileNumber} `
 
 These resiliency measures ensure that the system can continue to function even in the event of temporary failures, providing a seamless experience to users.
 
