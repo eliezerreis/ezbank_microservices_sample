@@ -119,6 +119,8 @@ services:
       retries: 3
       start_period: 10s
       timeout: 5s
+    environment:
+      SPRING_DATA_REDIS_HOST: redis
 
   redisinsight:
     image: redis/redisinsight:latest
