@@ -1,31 +1,21 @@
-# docker run -d --rm --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:4.0-management
+#!/bin/bash
 
-cd accounts
-mvn -DskipTests  clean install
-docker build . -t ezbank/accounts:0.0.1 -t ezbank/accounts:latest
-cd ..
+# List of services
+services=("accounts" "cards" "loans" "notificationserver" "configserver" "apigateway" "eurekaserver")
 
-cd cards
-mvn -DskipTests  clean install
-docker build . -t ezbank/cards:0.0.1 -t ezbank/cards:latest
-cd ..
+# Loop through each service
+for service in "${services[@]}"; do
+  echo "Building and Dockerizing service: $service"
 
-cd loans
-mvn -DskipTests  clean install
-docker build . -t ezbank/loans:0.0.1 -t ezbank/loans:latest
-cd ..
+  cd $service
+  mvn -DskipTests clean install
+  docker build . -t ezbank/$service:0.0.1 -t ezbank/$service:latest
+  cd ..
 
-cd configserver
-mvn -DskipTests  clean install
-docker build . -t ezbank/configserver:0.0.1 -t ezbank/configserver:latest
-cd ..
+  echo "$service Docker image built successfully."
+done
 
-cd apigateway
-mvn -DskipTests  clean install
-docker build . -t ezbank/apigateway:0.0.1 -t ezbank/apigateway:latest
-cd ..
 
-cd eurekaserver
-mvn -DskipTests  clean install
-docker build . -t ezbank/eurekaserver:0.0.1 -t ezbank/eurekaserver:latest
-cd ..
+#docker run -d --rm --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:4.0-management
+#docker build . -t ezbank/cards:0.0.1 -t ezbank/cards:latest
+

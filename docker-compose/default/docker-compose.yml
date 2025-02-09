@@ -106,34 +106,29 @@ services:
       SPRING_BOOT_APPLICATION_LOG_LEVEL: DEBUG
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8081/eureka/
 
-  redis:
-    image: redis:latest
-    container_name: redis
-    networks:
-      - eznetwork
-    ports:
-      - "6379:6379"
-    healthcheck:
-      test: [ "CMD", "redis-cli", "ping" ]
-      interval: 30s
-      retries: 3
-      start_period: 10s
-      timeout: 5s
-    environment:
-      SPRING_DATA_REDIS_HOST: redis
-
-  redisinsight:
-    image: redis/redisinsight:latest
-    container_name: redisinsight-ms
-    networks:
-      - eznetwork
-    ports:
-      - "8083:5540"
-    environment:
-      - REDIS_URL=redis:6379
-    depends_on:
-      - redis
-    restart: always
+#  message:
+#    image: "ezbank/message:latest"
+#    container_name: message-ms
+#    networks:
+#      - eznetwork
+#    ports:
+#      - "8093:8093"
+#    healthcheck:
+#      test: "curl --fail --silent message:8093/actuator/health/readiness | grep UP || exit 1"
+#      interval: 10s
+#      timeout: 5s
+#      retries: 3
+#      start_period: 10s
+#    depends_on:
+#      configserver:
+#        condition: service_healthy
+#      eurekaserver:
+#        condition: service_healthy
+#    environment:
+#      SPRING_PROFILES_ACTIVE: dev
+#      SPRING_CONFIG_IMPORT: configserver:http://configserver:8085/
+#      SPRING_BOOT_APPLICATION_LOG_LEVEL: DEBUG
+#      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8081/eureka/
 
   apigateway:
     image: "ezbank/apigateway:latest"
@@ -151,8 +146,8 @@ services:
         condition: service_healthy
       cards:
         condition: service_healthy
-      redis:
-        condition: service_healthy
+#      message:
+#        condition: service_healthy
     healthcheck:
       test: "curl --fail --silent apigateway:8080/actuator/health/readiness | grep UP || exit 1"
       interval: 10s
@@ -165,27 +160,9 @@ services:
       SPRING_BOOT_APPLICATION_LOG_LEVEL: DEBUG
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8081/eureka/
 
-
 networks:
   eznetwork:
     driver: bridge
 
-#  rabbitmq:
-#    image: rabbitmq:latest
-#    hostname: rabbitmq
-#    ports:
-#      - '5672:5672'
-#      - '15672:15672'
-#    command: ["rabbitmq-plugins", "enable", "rabbitmq_management"]
-#    healthcheck:
-#      test: ["CMD", "rabbitmqctl", "status"]
-#      timeout: 5s
-#      retries: 10
-#      start_period: 10s
-#    environment:
-#      RABBITMQ_DEFAULT_USER: guest
-#      RABBITMQ_DEFAULT_PASS: guest
-#    extends:
-#      file: common-config.yml
-#      service: network-deploy-service
+
 

@@ -1,0 +1,61 @@
+services:
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    networks:
+      - eznetwork
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 30s
+      retries: 3
+      start_period: 10s
+      timeout: 5s
+    environment:
+      SPRING_DATA_REDIS_HOST: redis
+
+  redisinsight:
+    image: redis/redisinsight:latest
+    container_name: redisinsight-ms
+    networks:
+      - eznetwork
+    ports:
+      - "8083:5540"
+    environment:
+      - REDIS_URL=redis:6379
+    depends_on:
+      - redis
+    restart: always
+
+  rabbitmq:
+    image: rabbitmq:latest
+    container_name: rabbitmq-ms
+    hostname: rabbitmq
+    networks:
+      - eznetwork
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    command: >
+      bash -c "rabbitmq-server & 
+      sleep 10 && 
+      rabbitmq-plugins enable rabbitmq_management && 
+      wait $!"
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+
+
+networks:
+  eznetwork:
+    driver: bridge
+
+
+

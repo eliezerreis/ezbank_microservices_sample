@@ -20,7 +20,6 @@ import java.util.Random;
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
-
     private final CustomerMapper customerMapper;
     private final AccountMapper accountMapper;
     private final CustomerDAO customerDAO;
@@ -28,10 +27,10 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
     public CustomerServiceImpl(
-            CustomerDAO customerDAO,
-            AccountDAO accountDAO,
-            AccountMapper accountMapper,
-            CustomerMapper customerMapper) {
+        CustomerDAO customerDAO,
+        AccountDAO accountDAO,
+        AccountMapper accountMapper,
+        CustomerMapper customerMapper) {
 
         this.accountMapper = accountMapper;
         this.customerMapper = customerMapper;
@@ -60,17 +59,18 @@ public class CustomerServiceImpl implements CustomerService {
         return result;
     }
 
+
     @Override
     public CustomerDTO fetch(String mobileNumber) {
         Optional<Customer> customer = customerDAO.findCustomer(mobileNumber);
 
-        if(customer.isEmpty()) {
+        if (customer.isEmpty()) {
             throw new ResourceNotFoundException("Customer doesn't exist on the database.");
         }
 
         Optional<Account> acc = accountDAO.findByCustomerId(customer.get().getCustomerId());
 
-        if(acc.isEmpty()) {
+        if (acc.isEmpty()) {
             throw new ResourceNotFoundException("There's no account for this customer.");
         }
 
