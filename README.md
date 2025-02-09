@@ -10,7 +10,7 @@ This project demonstrates the implementation of a modern **Microservices Archite
   A set of independently deployable services, each handling specific business logic, built with **Spring Boot**.
 
 - **Spring Cloud**:  
-  Utilizes Spring Cloud components for service discovery (Eureka and Spring Load Balancer), centralized configuration (Spring Cloud Config), and resilient service-to-service communication (Feign and Resilient4J), and Spring Cloud BUS.
+  Utilizes Spring Cloud components for service discovery (Eureka and Spring Load Balancer), centralized configuration (Spring Cloud Config), and resilient mechanism using Resilience4J.
 
 - **Docker**:  
   All services are containerized using **Docker**, ensuring consistency across development, testing, and production environments.
@@ -21,6 +21,9 @@ This project demonstrates the implementation of a modern **Microservices Archite
 - **Kafka**:  
   **Kafka** is used for asynchronous communication between services, enabling event-driven architecture and decoupled service interactions.
 
+- **RabbitMQ**:  
+  **RabbitMQ** is implemented for communication between services like **Accounts Service** and **Notification Service**. When a new account is created, a message is published to the RabbitMQ exchange, and the **Notification Service** listens for this message to send a **welcome SMS** and **welcome email** to the customer. After the email is sent, a confirmation is sent back to the **Accounts Service**, ensuring a smooth communication flow. This setup uses **Spring Cloud Functions** with **RabbitMQ** for reliable, decoupled service interaction.
+
 - **MongoDB**:  
   A NoSQL database used for storing unstructured or semi-structured data with high scalability and performance.
 
@@ -28,7 +31,7 @@ This project demonstrates the implementation of a modern **Microservices Archite
   **Spring Security**, **OAuth2**, and **JWT** are integrated for secure API communication, authentication, and authorization across services.
 
 - **Event-Driven Architecture**:  
-  Real-time, event-driven processing is handled with **Kafka** to ensure decoupled and reliable service interactions.
+  Real-time, event-driven processing is managed by **Kafka** and **RabbitMQ**. The use of these messaging brokers ensures that services remain loosely coupled and communicate asynchronously, improving scalability and fault tolerance. As a result, the system can handle high-throughput and fault isolation effectively, ensuring that services can function independently without direct dependency on one another.
 
 ## Additional Features
 
