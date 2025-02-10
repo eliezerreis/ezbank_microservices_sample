@@ -47,14 +47,22 @@ This project demonstrates the implementation of a modern **Microservices Archite
   
   - **Rate Limiting with Redis**: In the **Services**, **Redis** is used to implement rate limiting, ensuring that the system can handle high request volumes without overwhelming any particular service. To test this feature is recomended to use adobe benchmark that, in latest version of macOS, is installed by default. Open your terminal and run `ab -n 10 -c 2 -v 3 http://localhost:8090/accounts/api/customer/{mobileNumber} `
 
-These resiliency measures ensure that the system can continue to function even in the event of temporary failures, providing a seamless experience to users.
+  These resiliency measures ensure that the system can continue to function even in the event of temporary failures, providing a seamless experience to users.
+
+
+- **Observability & Monitoring**
+
+  This project integrates robust observability tools to ensure system high availability (HA) by covering the three pillars of observability:
+
+  - **Loki & Grafana for Logging**: Loki aggregates logs from all services and integrates with Grafana to provide a unified interface for log visualization. Logs are categorized by severity (INFO, ERROR, etc.), making it easier to quickly identify and resolve issues.
+  - **Prometheus & Grafana for Metrics**: Prometheus collects key metrics such as request count, latency, error rates, and resource usage from all microservices. These metrics are visualized in Grafana dashboards, enabling real-time monitoring of system health and performance.
+  - **OpenTelemetry & Tempo for Tracing**: Distributed tracing with OpenTelemetry tracks requests across services, allowing for detailed insights into their journey through the system. Tempo collects and visualizes these traces in Grafana, helping to pinpoint performance bottlenecks and offering a deeper view into service interactions.
+
+  This observability setup ensures efficient system monitoring, fault detection, and troubleshooting, significantly enhancing system reliability and performance.
 
 
 - **CI/CD Pipeline**:  
   Automated build, test, and deployment pipelines ensuring smooth and consistent delivery to production.
-
-- **Observability & Monitoring**:  
-  Integration with **Prometheus** and **Grafana** for monitoring, and **ELK Stack** for centralized logging, enabling efficient troubleshooting and tracing.
 
 ## Use Cases
 
