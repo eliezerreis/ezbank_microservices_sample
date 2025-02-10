@@ -1,6 +1,6 @@
 networks:
-  eznetwork:
-    driver: bridge
+  ezbank_eznetwork:
+    external: true
 
 services:
   loki:
@@ -10,7 +10,7 @@ services:
       - "3100:3100"
     command: -config.file=/etc/loki/local-config.yaml
     networks:
-      - eznetwork
+      - ezbank_eznetwork
 
   prometheus:
     image: prom/prometheus:v2.47.0
@@ -25,7 +25,7 @@ services:
     image: grafana/alloy:latest
     container_name: alloy-ms
     networks:
-      - eznetwork
+      - ezbank_eznetwork
     ports:
       - 12345:12345
     volumes:
@@ -37,7 +37,7 @@ services:
     image: grafana/grafana:latest
     container_name: grafana-ms
     networks:
-      - eznetwork
+      - ezbank_eznetwork
     ports:
       - "3000:3000"
     environment:

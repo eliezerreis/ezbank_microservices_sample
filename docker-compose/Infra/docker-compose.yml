@@ -1,10 +1,14 @@
+networks:
+  ezbank_eznetwork:
+    external: true
+
 services:
 
   redis:
     image: redis:latest
     container_name: redis
     networks:
-      - eznetwork
+      - ezbank_eznetwork
     ports:
       - "6379:6379"
     healthcheck:
@@ -20,7 +24,7 @@ services:
     image: redis/redisinsight:latest
     container_name: redisinsight-ms
     networks:
-      - eznetwork
+      - ezbank_eznetwork
     ports:
       - "8083:5540"
     environment:
@@ -29,33 +33,42 @@ services:
       - redis
     restart: always
 
-  rabbitmq:
-    image: rabbitmq:latest
-    container_name: rabbitmq-ms
+  rabbit:
+    image: rabbitmq:4.0-management
     hostname: rabbitmq
+    container_name: rabbitmq-ms
     networks:
-      - eznetwork
+      - ezbank_eznetwork
     ports:
-      - '5672:5672'
-      - '15672:15672'
-    command: >
-      bash -c "rabbitmq-server & 
-      sleep 10 && 
-      rabbitmq-plugins enable rabbitmq_management && 
-      wait $!"
+      - "5672:5672"
+      - "15672:15672"
     healthcheck:
-      test: ["CMD", "rabbitmqctl", "status"]
+      test: rabbitmq-diagnostics check_port_connectivity
+      interval: 10s
       timeout: 5s
       retries: 10
-      start_period: 10s
-    environment:
-      RABBITMQ_DEFAULT_USER: guest
-      RABBITMQ_DEFAULT_PASS: guest
+      start_period: 5s
 
 
-networks:
-  eznetwork:
-    driver: bridge
-
-
-
+#  rabbit:
+#    image: rabbitmq:latest
+#    container_name: rabbitmq-ms
+#    hostname: rabbitmq
+#    networks:
+#      - eznetwork
+#    ports:
+#      - '5672:5672'
+#      - '15672:15672'
+#    command: >
+#      bash -c "rabbitmq-server &
+#      sleep 10 &&
+#      rabbitmq-plugins enable rabbitmq_management &&
+#      wait $!"
+#    healthcheck:
+#      test: ["CMD", "rabbitmqctl", "status"]
+#      timeout: 5s
+#      retries: 10
+#      start_period: 10s
+#    environment:
+#      RABBITMQ_DEFAULT_USER: guest
+#      RABBITMQ_DEFAULT_PASS: guest
