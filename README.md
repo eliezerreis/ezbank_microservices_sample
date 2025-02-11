@@ -64,9 +64,6 @@ This project demonstrates the implementation of a modern **Microservices Archite
 - **CI/CD Pipeline**:  
   Automated build, test, and deployment pipelines ensuring smooth and consistent delivery to production.
 
-## Use Cases
-
-This project is ideal for demonstrating scalable and resilient applications like e-commerce platforms, order processing systems, and real-time data pipelines.
 
 ## Microservices
 
